@@ -14,15 +14,15 @@ public abstract class CoreDbContext : IDbContext
     private IStoreProcedureAsync? _storeProcedureAsync;
     private IRawAsync? _rawAsync;
     private bool _disposed;
-    
-    // ReSharper disable once VirtualMemberCallInConstructor
-    protected CoreDbContext() => Build(ConnectionString());
+
+    protected CoreDbContext(string connectionString)
+        => Build(connectionString);
 
     /// <summary>
     /// Represent a Connection string to a database. This method child have to override.
     /// </summary>
     /// <returns></returns>
-    protected abstract string ConnectionString(); 
+    protected virtual string ConnectionString() => "";
     
     /// <summary>
     /// Represents a connection to a SQL Server database. This class cannot be inherited.
