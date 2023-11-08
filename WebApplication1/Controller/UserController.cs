@@ -23,6 +23,14 @@ public class UserController : ControllerBase
         => Ok(await _context.Raw.GetAllAsync<UserModel>("SELECT * FROM dbo.Users"));
 
     [HttpPost("create-user")]
-    public async Task<IActionResult> CreateUserAsync([FromBody] UserRequest request)
-        => Ok(await _context.Procedure.CreateAsync("AddUser", request));
+    public async Task<IActionResult> CreateUserAsync()
+    {
+        for (int i = 0; i < 1000000; i++)
+        {
+            var request = new UserRequest($"Username{i}", $"Password{i}", $"Gmail{i}");
+            await _context.Procedure.CreateAsync("AddUser", request);
+        }
+        await _context.Transaction.CommitAsync();
+        return Ok();
+    }
 }

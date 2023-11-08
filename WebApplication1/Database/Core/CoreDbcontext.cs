@@ -44,8 +44,15 @@ public abstract class CoreDbContext : IDbContext
     /// </summary>
     public IRawAsync Raw => _rawAsync!;
 
-    protected virtual void OnConfiguring()
-        => Build(ConnectionString());
+    /// <summary>
+    /// Represent a configuring CoreDbContext.
+    /// </summary>
+    protected virtual void OnConfiguring(SqlConnection connection, SqlTransaction transaction)
+        => _configuring(connection, transaction);
+
+    private void _configuring(SqlConnection connection, SqlTransaction transaction)
+    {
+    }
     
     /// <summary>
     /// Represent a build database context and Opens a database connection with the property settings
@@ -58,6 +65,14 @@ public abstract class CoreDbContext : IDbContext
         _sqlConnection = new SqlConnection(connectionString);
         OpenConnection();
         _sqlTransaction = _sqlConnection.BeginTransaction();
+        ActivateService();
+    }
+
+    /// <summary>
+    /// Represent a activate service that injected to interaction with database. 
+    /// </summary>
+    private void ActivateService()
+    {
         _storeProcedureAsync = new StoreProcedureImpl(this);
         _rawAsync = new RawImpl(this);
     }

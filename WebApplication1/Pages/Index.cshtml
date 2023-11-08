@@ -5,7 +5,33 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>Hello</p>
+    <table id="dataTable" class="display">
+        <thead>
+        <tr>
+            <th>User Id</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Password</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.UserModels!)
+        {
+            <tr>
+                <td>@item.UserId</td>
+                <td>@item.Email</td>
+                <td>@item.Username</td>
+                <td>@item.Password</td>
+            </tr>
+        }
+        </tbody>
+    </table>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable();
+        });
+    </script>
+}
